@@ -20,7 +20,7 @@ export class CreateRequestDto {
   permission: number;
 
   @IsString()
-  login: string;
+  username: string;
 
   @IsString()
   password: string;

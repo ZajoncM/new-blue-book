@@ -1,6 +1,7 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/auth/entities/user.entity';
+import { RegistrationStatus } from 'src/common/enums/registration-status.enum';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -10,16 +11,13 @@ export class UsersService {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  async acceptRegistrationRequest(id: number) {
-    const user = await this.userRepository.preload({
-      id,
-      registrationStatus: 2,
-    });
+  async findOne(username: string) {
+    const user = await this.userRepository.findOne({ username });
 
     if (!user) {
-      throw new HttpException(`User #${id} not found`, 404);
+      throw new HttpException(`User not found`, 404);
     }
 
-    return this.userRepository.save(user);
+    return user;
   }
 }

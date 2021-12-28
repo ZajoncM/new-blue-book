@@ -27,7 +27,7 @@ export class User {
   permission: number;
 
   @Column()
-  login: string;
+  username: string;
 
   @Column()
   password: string;

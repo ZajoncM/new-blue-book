@@ -1,10 +1,12 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
+import { RequestsModule } from './requests/requests.module';
 import appConfig from './config/app.config';
 
+@Global()
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -24,6 +26,7 @@ import appConfig from './config/app.config';
       }),
     }),
     AuthModule,
+    RequestsModule,
   ],
   controllers: [],
   providers: [],

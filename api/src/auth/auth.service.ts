@@ -1,23 +1,28 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { CreateRequestDto } from './dto/create-request.dto';
-import { User } from './entities/user.entity';
+import { UsersService } from 'src/users/users.service';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
+    private readonly usersService: UsersService,
+    private jwtService: JwtService,
   ) {}
 
-  async createRequest(createRequestDto: CreateRequestDto) {
-    const user = this.userRepository.create({
-      ...createRequestDto,
-      registrationDate: Date.now().toString(),
-      registrationStatus: 1,
-    });
+  async validateUser(username: string, password: string) {
+    const user = await this.usersService.findOne(username);
+    if (user && user.password === password) {
+      const { username, password, ...rest } = user;
+      return rest;
+    }
 
-    return this.userRepository.save(user);
+    return null;
+  }
+
+  async login(user: any) {
+    const payload = { username: user.username, sub: user.userId };
+    return {
+      access_token: this.jwtService.sign(payload),
+    };
   }
 }
