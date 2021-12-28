@@ -15,7 +15,7 @@ export class User {
   registrationDate: string;
 
   @Column()
-  address: string;
+  email: string;
 
   @Column()
   phoneNumber: number;
