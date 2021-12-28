@@ -11,7 +11,7 @@ export class AuthService {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  createRequest(createRequestDto: CreateRequestDto) {
+  async createRequest(createRequestDto: CreateRequestDto) {
     const user = this.userRepository.create({
       ...createRequestDto,
       registrationDate: Date.now().toString(),

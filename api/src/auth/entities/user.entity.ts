@@ -1,12 +1,4 @@
-import { Permission } from 'src/common/entities/permission.entity';
-import { RegistrationStatus } from 'src/common/entities/registirationStatus.entity';
-import {
-  Column,
-  Entity,
-  JoinTable,
-  OneToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class User {
@@ -31,8 +23,7 @@ export class User {
   @Column()
   role: number;
 
-  @JoinTable()
-  @OneToOne((type) => Permission, (permission) => permission.id)
+  @Column()
   permission: number;
 
   @Column()
@@ -41,7 +32,6 @@ export class User {
   @Column()
   password: string;
 
-  @JoinTable()
-  @OneToOne((type) => RegistrationStatus, (status) => status.id)
+  @Column()
   registrationStatus: number;
 }
