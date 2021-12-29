@@ -12,30 +12,27 @@ export class Observer {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  lastname?: string;
+  @Column({ nullable: true })
+  lastname: string;
+
+  @Column({ nullable: true })
+  firstname: string;
+
+  @Column({ nullable: true })
+  username: string;
+
+  @Column({ nullable: true })
+  email: string;
+
+  @Column({ nullable: true })
+  phoneNumber: number;
+
+  @Column({ nullable: true })
+  photoUrl: string;
 
   @Column()
-  firstname?: string;
+  description: string;
 
-  @Column()
-  username?: string;
-
-  @Column()
-  email?: string;
-
-  @Column()
-  phoneNumber?: number;
-
-  @Column()
-  photoUrl?: string;
-
-  @Column()
-  description?: string;
-
-  @ManyToMany(() => Observation, (observation) => observation.observers, {
-    cascade: true,
-  })
-  @JoinTable()
+  @ManyToMany(() => Observation, (observation) => observation.observers)
   observations: Observation[];
 }

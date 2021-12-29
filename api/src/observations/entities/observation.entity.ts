@@ -4,6 +4,7 @@ import { Observer } from 'src/observers/entities/observer.entity';
 import {
   Column,
   Entity,
+  JoinTable,
   ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -33,7 +34,10 @@ export class Observation {
   })
   permission: Permission;
 
-  @ManyToMany(() => Observer, (observer) => observer.observations)
+  @ManyToMany(() => Observer, (observer) => observer.observations, {
+    cascade: true,
+  })
+  @JoinTable()
   observers: Observer[];
 
   @ManyToMany(() => Analysis, (analysis) => analysis.observation)

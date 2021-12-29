@@ -25,18 +25,9 @@ export class ObservationsService {
         ),
       ));
 
-    const analysis =
-      createObservationDto.analysis &&
-      (await Promise.all(
-        createObservationDto.analysis.map((analysis) =>
-          this.analysisService.create(analysis),
-        ),
-      ));
-
     const observation = this.observationRepository.create({
       ...createObservationDto,
       observers,
-      analysis,
     });
 
     return this.observationRepository.save(observation);
@@ -50,7 +41,7 @@ export class ObservationsService {
     const observer = await this.observationRepository.findOne(id);
 
     if (!observer) {
-      throw new HttpException(`Observer ${id} not found`, 404);
+      throw new HttpException(`Observation ${id} not found`, 404);
     }
 
     return observer;

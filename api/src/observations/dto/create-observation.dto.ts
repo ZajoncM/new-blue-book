@@ -1,6 +1,13 @@
-import { IsEnum, IsString, ValidateNested } from 'class-validator';
-import { Analysis } from 'src/analysis/entities/analysis.entity';
+import { Type } from 'class-transformer';
+import {
+  ArrayMinSize,
+  IsArray,
+  IsEnum,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
 import { Permission } from 'src/common/enums/permission.enum';
+import { CreateObserverDto } from 'src/observers/dto/create-observer.dto';
 import { Observer } from 'src/observers/entities/observer.entity';
 
 export class CreateObservationDto {
@@ -19,9 +26,7 @@ export class CreateObservationDto {
   @IsEnum(Permission)
   permission: Permission;
 
-  @ValidateNested()
-  observers: Observer[];
-
-  @ValidateNested()
-  analysis: Analysis[];
+  @ValidateNested({ each: true })
+  @Type(() => CreateObserverDto)
+  observers: CreateObserverDto[];
 }
