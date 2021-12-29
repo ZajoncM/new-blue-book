@@ -22,6 +22,7 @@ export class RequestsController {
   }
 
   @Get()
+  @Roles(Role.AdminSystem)
   findAllRequests() {
     return this.requestsService.findAllRequests();
   }

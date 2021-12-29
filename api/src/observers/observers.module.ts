@@ -8,5 +8,6 @@ import { ObserversService } from './observers.service';
   imports: [TypeOrmModule.forFeature([Observer])],
   controllers: [ObserversController],
   providers: [ObserversService],
+  exports: [ObserversService],
 })
 export class ObserversModule {}

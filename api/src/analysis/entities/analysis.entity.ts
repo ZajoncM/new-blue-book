@@ -2,7 +2,14 @@ import { Classification } from 'src/common/enums/classification.enum';
 import { Interpretation } from 'src/common/enums/interpretation.enum';
 import { Observation } from 'src/observations/entities/observation.entity';
 import { User } from 'src/users/entities/user.entity';
-import { Column, Entity, ManyToOne } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class Analysis {
