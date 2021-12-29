@@ -4,7 +4,15 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { RequestsModule } from './requests/requests.module';
+import { ObserversModule } from './observers/observers.module';
+import { ObservationsModule } from './observations/observations.module';
+import { AnalysisModule } from './analysis/analysis.module';
 import appConfig from './config/app.config';
+import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
+import { APP_GUARD } from '@nestjs/core';
+import { RolesGuard } from './common/guards/roles.guard';
+import { JwtStrategy } from './common/strategies/jwt.strategy';
+import { PassportModule } from '@nestjs/passport';
 
 @Global()
 @Module({
@@ -25,10 +33,24 @@ import appConfig from './config/app.config';
         synchronize: true,
       }),
     }),
+    PassportModule,
     AuthModule,
     RequestsModule,
+    ObserversModule,
+    ObservationsModule,
+    AnalysisModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    JwtStrategy,
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
+  ],
 })
 export class AppModule {}

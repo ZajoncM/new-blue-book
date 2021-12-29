@@ -14,7 +14,10 @@ export class RequestsService {
 
   async createRequest(createRequestDto: CreateRequestDto) {
     const isExistingUser = await this.userRepository.findOne({
-      username: createRequestDto.username,
+      where: [
+        { username: createRequestDto.username },
+        { email: createRequestDto.email },
+      ],
     });
 
     if (isExistingUser) {
@@ -30,16 +33,22 @@ export class RequestsService {
     return this.userRepository.save(user);
   }
 
-  async acceptRegistrationRequest(id: number) {
+  async acceptRegistrationRequest(email: string) {
     const user = await this.userRepository.preload({
-      id,
+      email,
       registrationStatus: RegistrationStatus.Registered,
     });
 
     if (!user) {
-      throw new HttpException(`User #${id} not found`, 404);
+      throw new HttpException(`User #${email} not found`, 404);
     }
 
     return this.userRepository.save(user);
+  }
+
+  findAllRequests() {
+    return this.userRepository.find({
+      registrationStatus: RegistrationStatus.Requested,
+    });
   }
 }

@@ -1,4 +1,4 @@
-import { IsPositive, IsString } from 'class-validator';
+import { IsInt, IsPositive, IsString } from 'class-validator';
 
 export class CreateRequestDto {
   @IsString()
@@ -8,12 +8,12 @@ export class CreateRequestDto {
   lastName: string;
 
   @IsString()
-  address: string;
+  email: string;
 
-  @IsPositive()
+  @IsInt()
   phoneNumber: number;
 
-  @IsPositive()
+  @IsInt()
   role: number;
 
   @IsPositive()

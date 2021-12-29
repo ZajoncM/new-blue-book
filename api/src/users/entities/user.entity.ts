@@ -1,9 +1,13 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Analysis } from 'src/analysis/entities/analysis.entity';
+import { Permission } from 'src/common/enums/permission.enum';
+import { RegistrationStatus } from 'src/common/enums/registration-status.enum';
+import { Role } from 'src/common/enums/role.enum';
+import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
 
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryColumn()
+  email: string;
 
   @Column()
   firstName: string;
@@ -15,16 +19,21 @@ export class User {
   registrationDate: string;
 
   @Column()
-  email: string;
-
-  @Column()
   phoneNumber: number;
 
-  @Column()
-  role: number;
+  @Column({
+    type: 'enum',
+    enum: Role,
+    default: Role.Reader,
+  })
+  role: Role;
 
-  @Column()
-  permission: number;
+  @Column({
+    type: 'enum',
+    enum: Permission,
+    default: Permission.DataExplicit,
+  })
+  permission: Permission;
 
   @Column()
   username: string;
@@ -32,6 +41,13 @@ export class User {
   @Column()
   password: string;
 
-  @Column()
-  registrationStatus: number;
+  @Column({
+    type: 'enum',
+    enum: RegistrationStatus,
+    default: RegistrationStatus.Requested,
+  })
+  registrationStatus: RegistrationStatus;
+
+  @OneToMany(() => Analysis, (analysis) => analysis.analyst)
+  analysis: Analysis[];
 }
