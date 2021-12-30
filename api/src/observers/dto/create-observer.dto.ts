@@ -3,11 +3,11 @@ import { IsInt, IsOptional, IsString } from 'class-validator';
 export class CreateObserverDto {
   @IsString()
   @IsOptional()
-  lastname?: string;
+  lastName?: string;
 
   @IsString()
   @IsOptional()
-  firstname?: string;
+  firstName?: string;
 
   @IsString()
   @IsOptional()

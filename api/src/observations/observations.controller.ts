@@ -9,8 +9,8 @@ import {
 } from '@nestjs/common';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { Role } from 'src/common/enums/role.enum';
-import { UpdateObserverDto } from 'src/observers/dto/update-observer.dto';
 import { CreateObservationDto } from './dto/create-observation.dto';
+import { UpdateObservationDto } from './dto/update-observation.dto';
 import { ObservationsService } from './observations.service';
 
 @Controller('observations')
@@ -36,12 +36,13 @@ export class ObservationsController {
   @Roles(Role.AdminData)
   update(
     @Param('id') id: number,
-    @Body() updateObserverDto: UpdateObserverDto,
+    @Body() updateObservationDto: UpdateObservationDto,
   ) {
-    return this.observationsService.update(id, updateObserverDto);
+    return this.observationsService.update(id, updateObservationDto);
   }
 
   @Delete(':id')
+  @Roles(Role.AdminData)
   remove(@Param('id') id: number) {
     return this.observationsService.remove(id);
   }

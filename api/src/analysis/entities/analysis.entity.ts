@@ -13,7 +13,9 @@ import {
 
 @Entity()
 export class Analysis {
-  @ManyToOne(() => User, (user) => user.analysis, { primary: true })
+  @ManyToOne(() => User, (user) => user.analysis, {
+    primary: true,
+  })
   analyst: User;
 
   @ManyToOne(() => Observation, (observation) => observation.analysis, {

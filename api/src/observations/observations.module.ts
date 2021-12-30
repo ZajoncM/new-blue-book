@@ -11,6 +11,7 @@ import { ObservationsService } from './observations.service';
 @Module({
   imports: [TypeOrmModule.forFeature([Observation, Analysis, Observer])],
   controllers: [ObservationsController],
-  providers: [ObservationsService, AnalysisService, ObserversService],
+  providers: [ObservationsService, ObserversService],
+  exports: [ObservationsService],
 })
 export class ObservationsModule {}

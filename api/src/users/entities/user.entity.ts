@@ -35,7 +35,7 @@ export class User {
   })
   permission: Permission;
 
-  @Column()
+  @Column({ unique: true })
   username: string;
 
   @Column()

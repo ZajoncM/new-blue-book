@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Request,
 } from '@nestjs/common';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { Role } from 'src/common/enums/role.enum';
@@ -21,28 +22,43 @@ export class AnalysisController {
     return this.analysisService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: number) {
-    return this.analysisService.findOne(id);
+  @Get(':email/:observation')
+  findOne(
+    @Param('email') email: string,
+    @Param('observation') observation: number,
+  ) {
+    return this.analysisService.findOne(email, observation);
   }
 
   @Post()
   @Roles(Role.Analyst, Role.AdminData)
-  create(@Body() createAnalysisDto: CreateAnalysisDto) {
-    return this.analysisService.create(createAnalysisDto);
+  create(@Body() createAnalysisDto: CreateAnalysisDto, @Request() req) {
+    return this.analysisService.create(createAnalysisDto, req.user);
   }
 
-  @Patch(':id')
+  @Patch(':username/:observation')
+  @Roles(Role.Analyst, Role.AdminData)
   update(
-    @Param('id') id: number,
-    @Body() updateObserverDto: UpdateAnalysisDto,
+    @Param('username') username: string,
+    @Param('observation') observation: number,
+    @Body() updateAnalysisDto: UpdateAnalysisDto,
+    @Request() req,
   ) {
-    return 'update analysis';
-    //   return this.analysisService.update(id, updateObserverDto);
+    return this.analysisService.update(
+      updateAnalysisDto,
+      username,
+      observation,
+      req.user,
+    );
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: number) {
-    return this.analysisService.remove(id);
+  @Delete(':email/:observation')
+  @Roles(Role.Analyst, Role.AdminData)
+  remove(
+    @Param('email') email: string,
+    @Param('observation') observation: number,
+    @Request() req,
+  ) {
+    return this.analysisService.remove(email, observation, req.user);
   }
 }

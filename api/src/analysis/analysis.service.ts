@@ -1,5 +1,9 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Role } from 'src/common/enums/role.enum';
+import { ObservationsService } from 'src/observations/observations.service';
+import { User } from 'src/users/entities/user.entity';
+import { UsersService } from 'src/users/users.service';
 import { Repository } from 'typeorm';
 import { CreateAnalysisDto } from './dto/create-analysis.dto';
 import { UpdateAnalysisDto } from './dto/update-analysis.dto';
@@ -10,10 +14,20 @@ export class AnalysisService {
   constructor(
     @InjectRepository(Analysis)
     private readonly analysisRepository: Repository<Analysis>,
+    private readonly observationsService: ObservationsService,
+    private readonly usersService: UsersService,
   ) {}
 
-  create(createAnalysisDto: CreateAnalysisDto) {
-    const analysis = this.analysisRepository.create(createAnalysisDto);
+  async create(createAnalysisDto: CreateAnalysisDto, user: Partial<User>) {
+    const observation = await this.observationsService.findOne(
+      createAnalysisDto.observationId,
+    );
+
+    const analysis = this.analysisRepository.create({
+      ...createAnalysisDto,
+      analyst: user,
+      observation,
+    });
 
     return this.analysisRepository.save(analysis);
   }
@@ -22,29 +36,51 @@ export class AnalysisService {
     return this.analysisRepository.find();
   }
 
-  async findOne(id: number) {
-    const analysis = await this.analysisRepository.findOne(id);
+  async findOne(email: string, observation: number) {
+    const analysis = await this.analysisRepository.findOne({
+      where: { analyst: { email }, observation },
+    });
 
     if (!analysis) {
-      throw new HttpException(`analysis ${id} not found`, 404);
+      throw new HttpException(`analysis not found`, 404);
     }
 
     return analysis;
   }
 
-  async update(updateAnalysisDto: UpdateAnalysisDto) {
-    const analysis = await this.analysisRepository.preload(updateAnalysisDto);
-
-    if (!analysis) {
-      throw new HttpException(`Analysis  not found`, 404);
+  async update(
+    updateAnalysisDto: UpdateAnalysisDto,
+    authorName: string,
+    observationId: number,
+    user: Partial<User>,
+  ) {
+    if (user.role !== Role.AdminData && authorName !== user.username) {
+      throw new HttpException(`Can't update an analysis`, 400);
     }
+    const observation = await this.observationsService.findOne(observationId);
 
-    return this.analysisRepository.save(analysis);
+    const author = await this.usersService.findOne(authorName);
+
+    const { email } = author;
+    const { id } = observation;
+
+    const prevAnalysis = await this.findOne(email, id);
+
+    return this.analysisRepository.save({
+      ...prevAnalysis,
+      ...updateAnalysisDto,
+      analyst: { email },
+      observation: { id },
+    });
   }
 
-  async remove(id: number) {
-    const analysis = await this.findOne(id);
+  async remove(email: string, observationId: number, user) {
+    if (user.role !== Role.AdminData && email !== user.email) {
+      throw new HttpException(`Can't update an analysis`, 400);
+    }
 
-    return this.analysisRepository.remove(analysis);
+    const analysis = await this.findOne(email, observationId);
+    this.analysisRepository.delete(analysis);
+    return analysis;
   }
 }

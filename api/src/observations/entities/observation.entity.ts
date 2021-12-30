@@ -40,6 +40,8 @@ export class Observation {
   @JoinTable()
   observers: Observer[];
 
-  @ManyToMany(() => Analysis, (analysis) => analysis.observation)
+  @OneToMany(() => Analysis, (analysis) => analysis.observation, {
+    cascade: true,
+  })
   analysis: Analysis[];
 }

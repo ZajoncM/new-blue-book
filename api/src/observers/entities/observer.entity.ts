@@ -13,10 +13,10 @@ export class Observer {
   id: number;
 
   @Column({ nullable: true })
-  lastname: string;
+  lastName: string;
 
   @Column({ nullable: true })
-  firstname: string;
+  firstName: string;
 
   @Column({ nullable: true })
   username: string;

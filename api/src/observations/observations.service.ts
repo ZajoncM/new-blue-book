@@ -13,7 +13,6 @@ export class ObservationsService {
     @InjectRepository(Observation)
     private readonly observationRepository: Repository<Observation>,
     private readonly observersService: ObserversService,
-    private readonly analysisService: AnalysisService,
   ) {}
 
   async create(createObservationDto: CreateObservationDto) {
@@ -38,13 +37,13 @@ export class ObservationsService {
   }
 
   async findOne(id: number) {
-    const observer = await this.observationRepository.findOne(id);
+    const observation = await this.observationRepository.findOne(id);
 
-    if (!observer) {
+    if (!observation) {
       throw new HttpException(`Observation ${id} not found`, 404);
     }
 
-    return observer;
+    return observation;
   }
 
   async update(id: number, updateObservation: UpdateObservationDto) {
@@ -61,8 +60,8 @@ export class ObservationsService {
   }
 
   async remove(id: number) {
-    const observer = await this.findOne(id);
+    const observation = await this.findOne(id);
 
-    return this.observationRepository.remove(observer);
+    return this.observationRepository.remove(observation);
   }
 }
