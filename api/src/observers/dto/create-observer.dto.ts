@@ -11,15 +11,15 @@ export class CreateObserverDto {
 
   @IsString()
   @IsOptional()
-  username?: string;
+  nick?: string;
 
   @IsString()
   @IsOptional()
   email?: string;
 
-  @IsInt()
+  @IsString()
   @IsOptional()
-  phoneNumber?: number;
+  phoneNumber?: string;
 
   @IsString()
   @IsOptional()

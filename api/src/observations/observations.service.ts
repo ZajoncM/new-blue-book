@@ -2,7 +2,8 @@ import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AnalysisService } from 'src/analysis/analysis.service';
 import { ObserversService } from 'src/observers/observers.service';
-import { Repository } from 'typeorm';
+import { User } from 'src/users/entities/user.entity';
+import { LessThanOrEqual, Repository } from 'typeorm';
 import { CreateObservationDto } from './dto/create-observation.dto';
 import { UpdateObservationDto } from './dto/update-observation.dto';
 import { Observation } from './entities/observation.entity';
@@ -32,12 +33,17 @@ export class ObservationsService {
     return this.observationRepository.save(observation);
   }
 
-  findAll() {
-    return this.observationRepository.find();
+  findAll(user: Partial<User>) {
+    return this.observationRepository.find({
+      permission: LessThanOrEqual(user.permission),
+    });
   }
 
-  async findOne(id: number) {
-    const observation = await this.observationRepository.findOne(id);
+  async findOne(id: number, user: Partial<User>) {
+    const observation = await this.observationRepository.findOne({
+      id,
+      permission: LessThanOrEqual(user.permission),
+    });
 
     if (!observation) {
       throw new HttpException(`Observation ${id} not found`, 404);
@@ -59,8 +65,8 @@ export class ObservationsService {
     return this.observationRepository.save(observation);
   }
 
-  async remove(id: number) {
-    const observation = await this.findOne(id);
+  async remove(id: number, user: Partial<User>) {
+    const observation = await this.findOne(id, user);
 
     return this.observationRepository.remove(observation);
   }

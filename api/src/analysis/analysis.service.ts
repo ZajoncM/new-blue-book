@@ -21,6 +21,7 @@ export class AnalysisService {
   async create(createAnalysisDto: CreateAnalysisDto, user: Partial<User>) {
     const observation = await this.observationsService.findOne(
       createAnalysisDto.observationId,
+      user,
     );
 
     const analysis = this.analysisRepository.create({
@@ -55,9 +56,12 @@ export class AnalysisService {
     user: Partial<User>,
   ) {
     if (user.role !== Role.AdminData && authorName !== user.username) {
-      throw new HttpException(`Can't update an analysis`, 400);
+      throw new HttpException(`Cannot update an analysis`, 400);
     }
-    const observation = await this.observationsService.findOne(observationId);
+    const observation = await this.observationsService.findOne(
+      observationId,
+      user,
+    );
 
     const author = await this.usersService.findOne(authorName);
 
@@ -76,7 +80,7 @@ export class AnalysisService {
 
   async remove(email: string, observationId: number, user) {
     if (user.role !== Role.AdminData && email !== user.email) {
-      throw new HttpException(`Can't update an analysis`, 400);
+      throw new HttpException(`Cannot delete an analysis`, 400);
     }
 
     const analysis = await this.findOne(email, observationId);

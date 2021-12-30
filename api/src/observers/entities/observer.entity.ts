@@ -1,11 +1,5 @@
 import { Observation } from 'src/observations/entities/observation.entity';
-import {
-  Column,
-  Entity,
-  JoinTable,
-  ManyToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Observer {
@@ -19,13 +13,13 @@ export class Observer {
   firstName: string;
 
   @Column({ nullable: true })
-  username: string;
+  nick: string;
 
   @Column({ nullable: true })
   email: string;
 
   @Column({ nullable: true })
-  phoneNumber: number;
+  phoneNumber: string;
 
   @Column({ nullable: true })
   photoUrl: string;

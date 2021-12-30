@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Request,
 } from '@nestjs/common';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { Role } from 'src/common/enums/role.enum';
@@ -17,13 +18,13 @@ import { ObservationsService } from './observations.service';
 export class ObservationsController {
   constructor(private readonly observationsService: ObservationsService) {}
   @Get()
-  findAll() {
-    return this.observationsService.findAll();
+  findAll(@Request() req) {
+    return this.observationsService.findAll(req.user);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: number) {
-    return this.observationsService.findOne(id);
+  findOne(@Param('id') id: number, @Request() req) {
+    return this.observationsService.findOne(id, req.user);
   }
 
   @Post()
@@ -43,7 +44,7 @@ export class ObservationsController {
 
   @Delete(':id')
   @Roles(Role.AdminData)
-  remove(@Param('id') id: number) {
-    return this.observationsService.remove(id);
+  remove(@Param('id') id: number, @Request() req) {
+    return this.observationsService.remove(id, req.user);
   }
 }
