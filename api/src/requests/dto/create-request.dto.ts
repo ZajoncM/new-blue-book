@@ -16,7 +16,7 @@ export class CreateRequestDto {
   @IsInt()
   role: number;
 
-  @IsPositive()
+  @IsInt()
   permission: number;
 
   @IsString()

@@ -16,6 +16,12 @@ export class AuthController {
 
   @Get('profile')
   getProfile(@Request() req) {
-    return req.user;
+    return this.authService.getProfile(req.user);
+  }
+
+  @Get('token')
+  getToken(@Request() req) {
+    const { exp, ...rest } = req.user;
+    return this.authService.getToken(rest);
   }
 }

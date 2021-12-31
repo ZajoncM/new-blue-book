@@ -20,6 +20,22 @@ export class AuthService {
     return null;
   }
 
+  async getToken(reqUser: Partial<User>) {
+    const user = await this.usersService.findOneByEmail(reqUser.email);
+
+    const { username, password, ...rest } = user;
+    return {
+      token: this.jwtService.sign(rest),
+    };
+  }
+
+  async getProfile(reqUser: Partial<User>) {
+    const user = await this.usersService.findOneByEmail(reqUser.email);
+
+    const { username, password, ...rest } = user;
+    return user;
+  }
+
   async login(user: Partial<User>) {
     const payload = user;
     return {

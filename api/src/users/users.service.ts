@@ -49,4 +49,20 @@ export class UsersService {
 
     return user;
   }
+
+  async findOneByEmail(email: string) {
+    const user = await this.userRepository.findOne({
+      email,
+    });
+
+    if (!user) {
+      throw new HttpException(`User not found`, 404);
+    }
+
+    if (user.registrationStatus === RegistrationStatus.Requested) {
+      throw new HttpException(`User not accepted`, 404);
+    }
+
+    return user;
+  }
 }

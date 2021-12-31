@@ -1,4 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Patch } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Request,
+} from '@nestjs/common';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { Role } from 'src/common/enums/role.enum';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -21,8 +29,11 @@ export class UsersController {
   }
 
   @Patch(':email')
-  @Roles(Role.AdminSystem)
-  update(@Param('email') email: string, @Body() updateUserDto: UpdateUserDto) {
+  update(
+    @Param('email') email: string,
+    @Body() updateUserDto: UpdateUserDto,
+    @Request() req,
+  ) {
     return this.usersService.update(email, updateUserDto);
   }
 
