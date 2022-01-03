@@ -4,12 +4,14 @@ import { CreateRequestDto } from 'src/requests/dto/create-request.dto';
 import { User } from 'src/users/entities/user.entity';
 import { RegistrationStatus } from 'src/common/enums/registration-status.enum';
 import { Repository } from 'typeorm';
+import { MailService } from 'src/mail/mail.service';
 
 @Injectable()
 export class RequestsService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    private readonly mailService: MailService,
   ) {}
 
   async createRequest(createRequestDto: CreateRequestDto) {
@@ -29,6 +31,8 @@ export class RequestsService {
       registrationDate: Date.now().toString(),
       registrationStatus: RegistrationStatus.Requested,
     });
+
+    await this.mailService.sendUserConfirmation(user);
 
     return this.userRepository.save(user);
   }

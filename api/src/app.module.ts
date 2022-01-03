@@ -13,6 +13,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './common/guards/roles.guard';
 import { JwtStrategy } from './common/strategies/jwt.strategy';
 import { PassportModule } from '@nestjs/passport';
+import { MailModule } from './mail/mail.module';
 
 @Global()
 @Module({
@@ -39,6 +40,7 @@ import { PassportModule } from '@nestjs/passport';
     ObserversModule,
     ObservationsModule,
     AnalysisModule,
+    MailModule,
   ],
   controllers: [],
   providers: [
