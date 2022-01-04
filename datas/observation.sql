@@ -1,30 +1,3 @@
--- -------------------------------------------------------------
--- TablePlus 4.5.0(396)
---
--- https://tableplus.com/
---
--- Database: postgres
--- Generation Time: 2021-12-30 12:02:19.2750
--- -------------------------------------------------------------
-
-
--- This script only contains the table creation statements and does not fully represent the table in the database. It's still missing: indices, triggers. Do not use it as a backup.
-
--- Sequence and defined type
-CREATE SEQUENCE IF NOT EXISTS observation_id_seq;
-DROP TYPE IF EXISTS "public"."observation_permission_enum";
-CREATE TYPE "public"."observation_permission_enum" AS ENUM ('3', '2', '1', '0');
-
--- Table Definition
-CREATE TABLE "public"."observation" (
-    "id" int4 NOT NULL DEFAULT nextval('observation_id_seq'::regclass),
-    "observationDate" varchar NOT NULL,
-    "coordinates" varchar NOT NULL,
-    "description" varchar NOT NULL,
-    "observationMaterialDirectory" varchar NOT NULL,
-    "permission" "public"."observation_permission_enum" NOT NULL DEFAULT '0'::observation_permission_enum,
-    PRIMARY KEY ("id")
-);
 
 INSERT INTO "public"."observation" ("id", "observationDate", "coordinates", "description", "observationMaterialDirectory", "permission") VALUES
 (11, '2021-07-05', '09-63', 'Aenean fermentum. Donec ut mauris eget massa tempor convallis. Nulla neque libero, convallis eget, eleifend luctus, ultricies eu, nibh. Quisque id justo sit amet sapien dignissim vestibulum. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nulla dapibus dolor vel est. Donec odio justo, sollicitudin ut, suscipit a, feugiat et, eros. Vestibulum ac est lacinia nisi venenatis tristique.', 'aenean auctor gravida sem praesent id massa id nisl venenatis lacinia aenean sit amet justo morbi ut odio', '2'),

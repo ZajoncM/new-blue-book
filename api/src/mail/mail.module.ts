@@ -3,7 +3,8 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
 import { Module } from '@nestjs/common';
 import { MailService } from './mail.service';
 import { ConfigService } from '@nestjs/config';
-
+import { BullModule } from '@nestjs/bull';
+import { EmailConsumer } from './mail.consumer';
 @Module({
   imports: [
     MailerModule.forRootAsync({
@@ -33,8 +34,17 @@ import { ConfigService } from '@nestjs/config';
         inject: [ConfigService],
       }),
     }),
+    BullModule.forRoot({
+      redis: {
+        host: 'localhost',
+        port: 6379,
+      },
+    }),
+    BullModule.registerQueue({
+      name: 'email-job',
+    }),
   ],
-  providers: [MailService],
+  providers: [MailService, EmailConsumer],
   exports: [MailService],
 })
 export class MailModule {}

@@ -34,6 +34,7 @@ import { MailModule } from './mail/mail.module';
         synchronize: true,
       }),
     }),
+
     PassportModule,
     AuthModule,
     RequestsModule,

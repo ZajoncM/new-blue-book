@@ -1,30 +1,4 @@
--- -------------------------------------------------------------
--- TablePlus 4.5.0(396)
---
--- https://tableplus.com/
---
--- Database: postgres
--- Generation Time: 2021-12-30 12:01:49.0560
--- -------------------------------------------------------------
 
-
--- This script only contains the table creation statements and does not fully represent the table in the database. It's still missing: indices, triggers. Do not use it as a backup.
-
--- Sequence and defined type
-CREATE SEQUENCE IF NOT EXISTS observer_id_seq;
-
--- Table Definition
-CREATE TABLE "public"."observer" (
-    "id" int4 NOT NULL DEFAULT nextval('observer_id_seq'::regclass),
-    "nick" varchar,
-    "email" varchar,
-    "photoUrl" varchar,
-    "description" varchar NOT NULL,
-    "lastName" varchar,
-    "firstName" varchar,
-    "phoneNumber" varchar,
-    PRIMARY KEY ("id")
-);
 
 INSERT INTO "public"."observer" ("id", "nick", "email", "photoUrl", "description", "lastName", "firstName", "phoneNumber") VALUES
 (13, 'jvarden0', 'jvarden0@geocities.com', 'http://dummyimage.com/141x100.png/dddddd/000000', 'Duis bibendum.', 'Varden', 'Jaquenetta', '421-780-9106'),
