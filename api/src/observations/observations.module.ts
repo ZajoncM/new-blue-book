@@ -1,17 +1,14 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AnalysisService } from 'src/analysis/analysis.service';
-import { Analysis } from 'src/analysis/entities/analysis.entity';
-import { Observer } from 'src/observers/entities/observer.entity';
-import { ObserversService } from 'src/observers/observers.service';
+import { ObserversModule } from 'src/observers/observers.module';
 import { Observation } from './entities/observation.entity';
 import { ObservationsController } from './observations.controller';
 import { ObservationsService } from './observations.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Observation, Analysis, Observer])],
+  imports: [TypeOrmModule.forFeature([Observation]), ObserversModule],
   controllers: [ObservationsController],
-  providers: [ObservationsService, ObserversService],
+  providers: [ObservationsService],
   exports: [ObservationsService],
 })
 export class ObservationsModule {}
