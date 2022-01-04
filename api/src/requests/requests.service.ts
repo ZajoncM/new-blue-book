@@ -5,7 +5,7 @@ import { User } from 'src/users/entities/user.entity';
 import { RegistrationStatus } from 'src/common/enums/registration-status.enum';
 import { Repository } from 'typeorm';
 import { MailService } from 'src/mail/mail.service';
-
+import * as bcrypt from 'bcrypt';
 @Injectable()
 export class RequestsService {
   constructor(
@@ -26,8 +26,12 @@ export class RequestsService {
       throw new HttpException(`User is Exist`, 404);
     }
 
+    const salt = await bcrypt.genSalt();
+    const hash = await bcrypt.hash(createRequestDto.password, salt);
+
     const user = this.userRepository.create({
       ...createRequestDto,
+      password: hash,
       registrationDate: Date.now().toString(),
       registrationStatus: RegistrationStatus.Requested,
     });
