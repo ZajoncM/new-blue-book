@@ -21,8 +21,8 @@ export class RequestsController {
     return this.requestsService.acceptRegistrationRequest(email);
   }
 
+  @Public()
   @Get()
-  @Roles(Role.AdminSystem)
   findAllRequests() {
     return this.requestsService.findAllRequests();
   }
